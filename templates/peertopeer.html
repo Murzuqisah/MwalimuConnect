@@ -1,0 +1,349 @@
+<html><head><base href="https://kenyanp2plearning.com/community/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KenyaLearn: Community Q&A</title>
+<style>
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  h1, h2, h3 {
+    margin: 0;
+  }
+  
+  .search-bar {
+    margin: 20px 0;
+  }
+  
+  .search-bar input {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .search-bar button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .ask-question {
+    margin-bottom: 20px;
+  }
+  
+  .ask-question button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .question-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .question-item {
+    background-color: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .question-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .question-meta {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  .question-body {
+    margin-bottom: 15px;
+  }
+  
+  .question-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .question-tags {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .tag {
+    background-color: #e0e0e0;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  
+  .question-actions button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  #questionForm textarea,
+  #questionForm input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  #questionForm button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>KenyaLearn Community Q&A</h1>
+    <p>Ask, Answer, and Learn Together</p>
+  </header>
+
+  <div class="container">
+    <div class="search-bar">
+      <input type="text" placeholder="Search for questions...">
+      <button onclick="searchQuestions()">Search</button>
+    </div>
+
+    <div class="ask-question">
+      <button onclick="openQuestionModal()">Ask a Question</button>
+    </div>
+
+    <ul class="question-list" id="questionList">
+      <!-- Questions will be dynamically added here -->
+    </ul>
+  </div>
+
+  <div id="questionModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeQuestionModal()">&times;</span>
+      <h2>Ask a Question</h2>
+      <form id="questionForm">
+        <input type="text" id="questionTitle" placeholder="Enter your question title" required>
+        <textarea id="questionBody" rows="5" placeholder="Describe your question in detail" required></textarea>
+        <input type="text" id="questionTags" placeholder="Enter tags (comma-separated)">
+        <button type="submit">Post Question</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Sample questions data
+    let questions = [
+      {
+        id: 1,
+        title: "How do I solve quadratic equations?",
+        body: "I'm struggling with quadratic equations in my algebra class. Can someone explain the steps to solve them?",
+        author: "Alice Student",
+        date: "2023-06-15",
+        tags: ["mathematics", "algebra"],
+        answers: 3,
+        views: 25
+      },
+      {
+        id: 2,
+        title: "What's the difference between mitosis and meiosis?",
+        body: "I keep mixing up mitosis and meiosis in my biology class. Can someone explain the key differences?",
+        author: "Bob Learner",
+        date: "2023-06-14",
+        tags: ["biology", "cell-division"],
+        answers: 2,
+        views: 18
+      },
+      {
+        id: 3,
+        title: "How to write a compelling essay introduction?",
+        body: "I'm working on an essay for my English class and I'm struggling with the introduction. Any tips?",
+        author: "Carol Writer",
+        date: "2023-06-13",
+        tags: ["english", "writing"],
+        answers: 4,
+        views: 32
+      }
+    ];
+
+    function displayQuestions() {
+      const questionList = document.getElementById('questionList');
+      questionList.innerHTML = '';
+
+      questions.forEach(question => {
+        const li = document.createElement('li');
+        li.className = 'question-item';
+        li.innerHTML = `
+          <div class="question-header">
+            <span class="question-title">${question.title}</span>
+            <span class="question-meta">Asked by ${question.author} on ${question.date}</span>
+          </div>
+          <div class="question-body">${question.body}</div>
+          <div class="question-footer">
+            <div class="question-tags">
+              ${question.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            <div class="question-actions">
+              <span>${question.answers} answers</span>
+              <span>${question.views} views</span>
+              <button onclick="viewQuestion(${question.id})">View</button>
+              <button onclick="answerQuestion(${question.id})">Answer</button>
+            </div>
+          </div>
+        `;
+        questionList.appendChild(li);
+      });
+    }
+
+    function searchQuestions() {
+      const searchTerm = document.querySelector('.search-bar input').value.toLowerCase();
+      const filteredQuestions = questions.filter(question => 
+        question.title.toLowerCase().includes(searchTerm) || 
+        question.body.toLowerCase().includes(searchTerm) ||
+        question.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+      questions = filteredQuestions;
+      displayQuestions();
+    }
+
+    function openQuestionModal() {
+      document.getElementById('questionModal').style.display = 'block';
+    }
+
+    function closeQuestionModal() {
+      document.getElementById('questionModal').style.display = 'none';
+    }
+
+    document.getElementById('questionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('questionTitle').value;
+      const body = document.getElementById('questionBody').value;
+      const tags = document.getElementById('questionTags').value.split(',').map(tag => tag.trim());
+
+      const newQuestion = {
+        id: questions.length + 1,
+        title: title,
+        body: body,
+        author: "Current User", // Replace with actual user name
+        date: new Date().toISOString().split('T')[0],
+        tags: tags,
+        answers: 0,
+        views: 0
+      };
+
+      questions.unshift(newQuestion);
+      displayQuestions();
+      closeQuestionModal();
+    });
+
+    function viewQuestion(id) {
+      // Implement view question functionality
+      alert(`Viewing question ${id}`);
+      // This could open a new page or modal with the full question and its answers
+    }
+
+    function answerQuestion(id) {
+      // Implement answer question functionality
+      alert(`Answering question ${id}`);
+      // This could open a modal or form for submitting an answer
+    }
+
+    // Initial display of questions
+    displayQuestions();
+
+    // Simulating real-time updates
+    setInterval(() => {
+      // Randomly update view count for a question
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      questions[randomIndex].views += 1;
+      displayQuestions();
+    }, 5000);
+  </script>
+</body></html>

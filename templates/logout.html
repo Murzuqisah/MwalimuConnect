@@ -1,12 +1,105 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-	<title>Logout</title>
-</head>
-<body>
-	<h1>Logout</h1>
-	<p>You have been logged out.</p>
-	<a href="index.php">Return to the homepage</a>
-</body>
-</html>
+<html><head><base href="https://mwalimulink.edu/logout">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mwalimu Link: Logout</title>
+	<style>
+	  :root {
+		--primary-color: #2c3e50;
+		--secondary-color: #27ae60;
+		--accent-color: #f39c12;
+		--background-color: #ecf0f1;
+		--text-color: #34495e;
+	  }
+	
+	  * {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	  }
+	
+	  body {
+		font-family: 'Lato', sans-serif;
+		background-color: var(--background-color);
+		color: var(--text-color);
+		line-height: 1.6;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+		padding: 2rem;
+	  }
+	
+	  .logout-container {
+		background-color: #fff;
+		border-radius: 10px;
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+		padding: 2rem;
+		width: 100%;
+		max-width: 400px;
+		text-align: center;
+	  }
+	
+	  h1 {
+		color: var(--primary-color);
+		margin-bottom: 1rem;
+		font-size: 2.5rem;
+	  }
+	
+	  p {
+		margin-bottom: 1.5rem;
+		font-size: 1.1rem;
+	  }
+	
+	  .btn {
+		display: inline-block;
+		background-color: var(--secondary-color);
+		color: white;
+		text-decoration: none;
+		padding: 0.75rem 1.5rem;
+		border-radius: 5px;
+		font-size: 1.1rem;
+		transition: background-color 0.3s ease;
+	  }
+	
+	  .btn:hover {
+		background-color: #219653;
+	  }
+	
+	  @keyframes fadeIn {
+		from { opacity: 0; transform: translateY(-10px); }
+		to { opacity: 1; transform: translateY(0); }
+	  }
+	
+	  .logout-container {
+		animation: fadeIn 0.5s ease-out;
+	  }
+	</style>
+	</head>
+	<body>
+	  <div class="logout-container">
+		<h1>Logout Successful</h1>
+		<p>You have been safely logged out of your Mwalimu Link account.</p>
+		<a href="/" class="btn">Return to Homepage</a>
+	  </div>
+	
+	  <script>
+		document.addEventListener('DOMContentLoaded', function() {
+		  // Clear any stored session data
+		  localStorage.removeItem('mwalimulink_session');
+		  sessionStorage.removeItem('mwalimulink_session');
+	
+		  // You might want to make an API call to invalidate the session on the server
+		  // This is a placeholder for that functionality
+		  fetch('/api/logout', { method: 'POST' })
+			.then(response => response.json())
+			.then(data => console.log('Logout API response:', data))
+			.catch(error => console.error('Error:', error));
+	
+		  // Redirect to homepage after 5 seconds
+		  setTimeout(() => {
+			window.location.href = '/';
+		  }, 5000);
+		});
+	  </script>
+	</body>
+	</html>

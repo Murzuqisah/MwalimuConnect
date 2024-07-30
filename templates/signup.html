@@ -1,55 +1,218 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Signup</title>
+<html><head><base href="https://mwalimulink.edu/signup">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mwalimu Link: Sign Up</title>
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #27ae60;
+        --accent-color: #f39c12;
+        --background-color: #ecf0f1;
+        --text-color: #34495e;
+        --input-bg: #fff;
+        --input-border: #bdc3c7;
+      }
+    
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    
+      body {
+        font-family: 'Lato', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem;
+      }
+    
+      .signup-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 100%;
+        max-width: 500px;
+      }
+    
+      h1 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2.5rem;
+      }
+    
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+    
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+    
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+    
+      input, select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--input-border);
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+    
+      input:focus, select:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+      }
+    
+      button {
+        background-color: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+    
+      button:hover {
+        background-color: #219653;
+      }
+    
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+    
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    
+      .signup-container {
+        animation: fadeIn 0.5s ease-out;
+      }
+    </style>
     <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js" defer></script>
-    
-</head>
-<body>
-    
-    <h1>Signup</h1>
-    
-    <form action="/login" method="post" id="signup" novalidate>
-        <div>
+    </head>
+    <body>
+      <div class="signup-container">
+        <h1>Join Mwalimu Link</h1>
+        
+        <form action="/signup" method="post" id="signup" novalidate>
+          <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
-        </div>
-        
-        <div>
-            <label for="email">email</label>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
-        </div>
-        
-        <div>
+          </div>
+          
+          <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
-        </div>
-        
-        <div>
-            <label for="password_confirmation">Repeat password</label>
+          </div>
+          
+          <div class="form-group">
+            <label for="password_confirmation">Repeat Password</label>
             <input type="password" id="password_confirmation" name="password_confirmation" required>
-        </div>
-        <div>
+          </div>
+    
+          <div class="form-group">
             <label for="roles">Role</label>
             <select id="roles" name="roles" required>
-                <option value="" disabled selected>Select your role</option>
-                <option value="tutor">Tutor</option>
-                <option value="student">Student</option>
+              <option value="" disabled selected>Select your role</option>
+              <option value="tutor">Mwalimu (Tutor)</option>
+              <option value="student">Mwanafunzi (Student)</option>
             </select>
-        </div>
-        <button>Sign up</button>
-    </form>
-    <script src="script.js"></script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
+          </div>
+    
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+    
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const validator = new JustValidate('#signup', {
+            errorFieldCssClass: 'is-invalid',
+            errorLabelStyle: {
+              fontSize: '14px',
+              color: '#e74c3c',
+            },
+            focusInvalidField: true,
+            lockForm: true,
+          });
+    
+          validator
+            .addField('#name', [
+              {
+                rule: 'required',
+                errorMessage: 'Name is required',
+              },
+              {
+                rule: 'minLength',
+                value: 3,
+                errorMessage: 'Name must be at least 3 characters',
+              },
+            ])
+            .addField('#email', [
+              {
+                rule: 'required',
+                errorMessage: 'Email is required',
+              },
+              {
+                rule: 'email',
+                errorMessage: 'Email is invalid',
+              },
+            ])
+            .addField('#password', [
+              {
+                rule: 'required',
+                errorMessage: 'Password is required',
+              },
+              {
+                rule: 'password',
+                errorMessage: 'Password must contain at least 8 characters, one uppercase letter, one number, and one special character',
+              },
+            ])
+            .addField('#password_confirmation', [
+              {
+                rule: 'required',
+                errorMessage: 'Please repeat your password',
+              },
+              {
+                validator: (value, fields) => {
+                  return value === fields['#password'].elem.value;
+                },
+                errorMessage: 'Passwords should match',
+              },
+            ])
+            .addField('#roles', [
+              {
+                rule: 'required',
+                errorMessage: 'Please select your role',
+              },
+            ])
+            .onSuccess((event) => {
+              console.log('Validation passes and form submitted', event);
+            });
+        });
+      </script>
+    </body>
+    </html>

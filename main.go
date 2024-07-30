@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", servePage)
 	// Initialize blockchain with genesis block
 	blockchain := functions.Blockchain{}
 	genesisBlock := functions.Block{
@@ -29,7 +28,7 @@ func main() {
 	http.HandleFunc("/static/", fileServer)
 
 	// Serve dynamic HTML templates
-	//http.HandleFunc("/", servePage)
+	http.HandleFunc("/", servePage)
 
 	// // Handle routes
 	http.HandleFunc("/forgot-password", functions.ServeForgotPasswordForm)

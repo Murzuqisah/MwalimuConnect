@@ -1,16 +1,19 @@
 package main
 
 import (
+	"fmt"
+	"html/template"
+	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	"mwalimu/functions"
 )
 
 func main() {
-	http.HandleFunc("/login", functions.LoginHandler)
-	http.HandleFunc("/logout", functions.LogoutHandler)
-	http.Handle("/protected", functions.AuthMiddleware(http.HandlerFunc(functions.ProtectedHandler)))
+	http.HandleFunc("/signup", handler)
 
 	blockchain := functions.Blockchain{}
 	genesisBlock := functions.Block{
@@ -21,7 +24,7 @@ func main() {
 	genesisBlock.Hash = functions.CalculateHash(genesisBlock)
 	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
 
-	block1Data := []byte("")
+	// block1Data := []byte("")
 
 	// Serve static files (CSS, JS)
 	http.HandleFunc("/scripts/", fileServer)
@@ -29,8 +32,14 @@ func main() {
 
 	// Serve dynamic HTML templates
 	http.HandleFunc("/", servePage)
+	// Handle routes
+	http.HandleFunc("/forgot-password", functions.ServeForgotPasswordForm)
+	http.HandleFunc("/handle-forgot-password", functions.HandleForgotPassword)
+	http.HandleFunc("/reset-password", functions.ServeResetPasswordForm)
+	http.HandleFunc("/handle-reset-password", functions.HandleResetPassword)
 
 	// Start the server
+	log.Printf("Server started at http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -43,17 +52,29 @@ func fileServer(w http.ResponseWriter, r *http.Request) {
 func servePage(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Path[1:]
 	if page == "" || page == "/" {
-		page = "admin.html" // Default page
+		page = "index.html"
 	}
 
 	// Define template path
-	tmplPath := "./templates/" + page + ".html"
+	tmplPath := "./templates/" + page
 
 	// Parse and execute the template
-	tmpl, err := functions.ParseFiles(tmplPath)
+	tmpl, err := template.New("").Parse(tmplPath)
 	if err != nil {
-		http.Error(w, "Page not found", http.StatusNotFound)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return
 	}
 	tmpl.Execute(w, nil)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	switch r.URL.Path {
+	case "/signup":
+		functions.SignupHandler(w, r)
+	default:
+		code := http.StatusNotFound
+		codefin := strconv.Itoa(code)
+		fmt.Printf(codefin, "Page not found")
+		os.Exit(1)
+	}
 }

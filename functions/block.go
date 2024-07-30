@@ -14,7 +14,7 @@ type Block struct {
 
 // Blockchain block linking structure
 func CalculateHash(block Block) []byte {
-	record := string(block.Timestamp) + string(block.Data) + string(block.PreviousHash)
+	record := string(int32(block.Timestamp)) + string(block.Data) + string(block.PreviousHash)
 	hash := sha256.New()
 	hash.Write([]byte(record))
 	return hash.Sum(nil)

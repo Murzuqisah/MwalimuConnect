@@ -50,29 +50,15 @@ func AuthMiddleware(next http.Handler) http.Handler {
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		// Serve the signup form
-		tmpl := `
-		<!DOCTYPE html>
-		<html>
-		<head><title>Sign Up</title></head>
-		<body>
-			<h1>Sign Up</h1>
-			<form method="post" action="/signup">
-				<label>Name:</label>
-				<input type="text" name="name" required><br>
-				<label>Email:</label>
-				<input type="text" name="email" required><br>
-				<label>Password:</label>
-				<input type="password" name="password" required><br>
-				<label for="password_confirmation">Repeat Password</label>
-            	<input type="password" id="password_confirmation" name="password_confirmation" required>
-				<button type="submit">Sign Up</button>
-			</form>
-		</body>
-		</html>
-		`
-		t := template.New("signup")
-		t, _ = t.Parse(tmpl)
-		t.Execute(w, nil)
+		tmpl, err := template.ParseFiles("templates/signup.html")
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -81,6 +67,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 
+		// Check if the username already exists
 		if _, exists := users[username]; exists {
 			http.Error(w, "User already exists", http.StatusConflict)
 			return
@@ -89,10 +76,11 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		// Store the user credentials (in a real app, hash the password)
 		users[username] = password
 
-		// Redirect to login page
+		// Redirect to login page (adjust the URL as per your application's login route)
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
 
+	// Handle other HTTP methods (not allowed for this route)
 	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 }

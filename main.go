@@ -1,20 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
 	"mwalimu/functions"
 )
 
 func main() {
-	http.HandleFunc("/signup", handler)
-
+	// Initialize blockchain with genesis block
 	blockchain := functions.Blockchain{}
 	genesisBlock := functions.Block{
 		Timestamp:    time.Now().Unix(),
@@ -24,15 +20,15 @@ func main() {
 	genesisBlock.Hash = functions.CalculateHash(genesisBlock)
 	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
 
-	// block1Data := []byte("")
-
 	// Serve static files (CSS, JS)
 	http.HandleFunc("/scripts/", fileServer)
 	http.HandleFunc("/static/", fileServer)
 
 	// Serve dynamic HTML templates
 	http.HandleFunc("/", servePage)
+
 	// Handle routes
+	http.HandleFunc("/signup", functions.SignupHandler)
 	http.HandleFunc("/forgot-password", functions.ServeForgotPasswordForm)
 	http.HandleFunc("/handle-forgot-password", functions.HandleForgotPassword)
 	http.HandleFunc("/reset-password", functions.ServeResetPasswordForm)
@@ -40,12 +36,14 @@ func main() {
 
 	// Start the server
 	log.Printf("Server started at http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("Server failed: %v", err)
+	}
 }
 
 // Serve static files (CSS, JS)
 func fileServer(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./static/"+r.URL.Path[1:])
+	http.ServeFile(w, r, "./static/"+r.URL.Path[len("/scripts/"):])
 }
 
 // Serve HTML pages based on referral
@@ -59,22 +57,16 @@ func servePage(w http.ResponseWriter, r *http.Request) {
 	tmplPath := "./templates/" + page
 
 	// Parse and execute the template
-	tmpl, err := template.New("").Parse(tmplPath)
+	tmpl, err := template.ParseFiles(tmplPath)
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		log.Printf("Template parsing error: %v", err)
 		return
 	}
-	tmpl.Execute(w, nil)
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/signup":
-		functions.SignupHandler(w, r)
-	default:
-		code := http.StatusNotFound
-		codefin := strconv.Itoa(code)
-		fmt.Printf(codefin, "Page not found")
-		os.Exit(1)
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		log.Printf("Template execution error: %v", err)
+		return
 	}
 }

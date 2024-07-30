@@ -1,0 +1,325 @@
+<html><head><base href="https://mwalimulink.edu/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mwalimu Connect: Peer-to-Peer E-Learning with Crypto Payments</title>
+<style>
+  :root {
+    --primary-color: #2c3e50;
+    --secondary-color: #27ae60;
+    --accent-color: #f39c12;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+
+  header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-color);
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+  }
+
+  .nav-links li {
+    margin-left: 2rem;
+  }
+
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent-color);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    text-align: center;
+    padding: 8rem 2rem 6rem;
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero p {
+    font-size: 1.3rem;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .features {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .feature {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .feature:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature i {
+    font-size: 3.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+  }
+
+  .feature h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .how-it-works {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .how-it-works h2 {
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+  }
+
+  .steps {
+    display: flex;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    flex-basis: 30%;
+    margin-bottom: 2rem;
+  }
+
+  .step-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+  }
+
+  .cryptocurrencies {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .cryptocurrencies h2 {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+  }
+
+  .crypto-icons {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  .crypto-icons i {
+    font-size: 4rem;
+  }
+
+  footer {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 1s ease-out;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Mwalimu Connect</div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#crypto">Crypto Payments</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1 class="fade-in-up">Connect. Learn. Earn.</h1>
+      <p class="fade-in-up">Mwalimu Link revolutionizes peer-to-peer e-learning with cryptocurrency payments. Share knowledge, gain skills, and participate in a global learning community.</p>
+      <a href="#get-started" class="cta-button fade-in-up">Join Mwalimu Link</a>
+    </section>
+
+    <section id="features" class="features">
+      <div class="feature fade-in-up">
+        <i class="fas fa-users"></i>
+        <h3>Peer-to-Peer Learning</h3>
+        <p>Connect directly with learners and educators worldwide, sharing knowledge and experiences.</p>
+      </div>
+      <div class="feature fade-in-up">
+        <i class="fas fa-coins"></i>
+        <h3>Crypto Payments</h3>
+        <p>Use popular cryptocurrencies for secure and borderless transactions within our platform.</p>
+      </div>
+      <div class="feature fade-in-up">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <h3>Become a Mwalimu</h3>
+        <p>Share your expertise and earn cryptocurrency by creating and teaching courses.</p>
+      </div>
+      <div class="feature fade-in-up">
+        <i class="fas fa-globe-africa"></i>
+        <h3>Global Community</h3>
+        <p>Join a diverse network of learners and educators from around the world.</p>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+      <h2>How Mwalimu Link Works</h2>
+      <div class="steps">
+        <div class="step fade-in-up">
+          <div class="step-number">1</div>
+          <h3>Create Your Profile</h3>
+          <p>Sign up and showcase your skills, interests, and areas of expertise.</p>
+        </div>
+        <div class="step fade-in-up">
+          <div class="step-number">2</div>
+          <h3>Connect & Learn</h3>
+          <p>Find peer educators or students, and engage in interactive learning sessions.</p>
+        </div>
+        <div class="step fade-in-up">
+          <div class="step-number">3</div>
+          <h3>Pay with Crypto</h3>
+          <p>Use cryptocurrency for secure and efficient payments for courses or tutoring.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="crypto" class="cryptocurrencies">
+      <h2>Accepted Cryptocurrencies</h2>
+      <div class="crypto-icons">
+        <i class="fab fa-bitcoin" title="Bitcoin"></i>
+        <i class="fab fa-ethereum" title="Ethereum"></i>
+        <i class="fas fa-coins" title="Litecoin"></i>
+        <i class="fab fa-btc" title="Bitcoin Cash"></i>
+        <i class="fas fa-chart-line" title="Ripple"></i>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Mwalimu Connect. Empowering peer-to-peer learning worldwide.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-up');
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      document.querySelectorAll('.feature, .step').forEach(element => {
+        observer.observe(element);
+      });
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,15 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"time"
 
 	"mwalimu/functions"
 )
 
 func main() {
+	http.HandleFunc("/", servePage)
 	// Initialize blockchain with genesis block
 	blockchain := functions.Blockchain{}
 	genesisBlock := functions.Block{
@@ -25,14 +29,16 @@ func main() {
 	http.HandleFunc("/static/", fileServer)
 
 	// Serve dynamic HTML templates
-	http.HandleFunc("/", servePage)
+	//http.HandleFunc("/", servePage)
 
-	// Handle routes
-	http.HandleFunc("/signup", functions.SignupHandler)
+	// // Handle routes
 	http.HandleFunc("/forgot-password", functions.ServeForgotPasswordForm)
 	http.HandleFunc("/handle-forgot-password", functions.HandleForgotPassword)
 	http.HandleFunc("/reset-password", functions.ServeResetPasswordForm)
 	http.HandleFunc("/handle-reset-password", functions.HandleResetPassword)
+
+	// serve signup
+	http.HandleFunc("/signup", functions.SignupHandler)
 
 	// Start the server
 	log.Printf("Server started at http://localhost:8080")
@@ -68,5 +74,18 @@ func servePage(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		log.Printf("Template execution error: %v", err)
 		return
+	}
+}
+
+// The handler function for signup route
+func handler(w http.ResponseWriter, r *http.Request) {
+	switch r.URL.Path {
+	case "/":
+		functions.SignupHandler(w, r)
+	default:
+		code := http.StatusNotFound
+		codefin := strconv.Itoa(code)
+		fmt.Printf(codefin, "Page not found")
+		os.Exit(1)
 	}
 }

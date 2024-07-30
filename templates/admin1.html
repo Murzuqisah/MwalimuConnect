@@ -1,0 +1,317 @@
+<html><head><base href="https://kenyanp2plearning.com/admin/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KenyaLearn: Admin Dashboard</title>
+<style>
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  .container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .admin-info {
+    margin-bottom: 20px;
+  }
+  
+  .sign-out {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .sign-out:hover {
+    background-color: #c0392b;
+  }
+  
+  h1, h2 {
+    color: var(--primary-color);
+  }
+  
+  .dashboard-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .stat-card h3 {
+    margin: 0;
+    font-size: 2em;
+  }
+  
+  .stat-card p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+    opacity: 0.8;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .action-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .view-btn {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .view-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  .blockchain-info {
+    background-color: #3498db;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .blockchain-info h3 {
+    margin-top: 0;
+  }
+  
+  .blockchain-stats {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .blockchain-stat {
+    text-align: center;
+  }
+  
+  .blockchain-stat span {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="admin-info">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome, <span id="adminName">John Admin</span></p>
+        <p>ID: <span id="adminId">ADM001</span></p>
+        <button class="sign-out" onclick="signOut()">Sign Out</button>
+      </div>
+    </div>
+    <div class="main-content">
+      <h1>KenyaLearn P2P Platform Overview</h1>
+      
+      <div class="dashboard-section">
+        <h2>Platform Statistics</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3 id="totalUsers">1,234</h3>
+            <p>Total Users</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="activeTutors">87</h3>
+            <p>Active Tutors</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="activeStudents">1,147</h3>
+            <p>Active Students</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="sessionsToday">56</h3>
+            <p>Sessions Today</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Recent Transactions</h2>
+        <table id="transactionsTable">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Amount (KES)</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsTableBody">
+            <!-- Transaction rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="dashboard-section">
+        <h2>Tutor-Student Connections</h2>
+        <table id="connectionsTable">
+          <thead>
+            <tr>
+              <th>Tutor</th>
+              <th>Student</th>
+              <th>Subject</th>
+              <th>Session Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="connectionsTableBody">
+            <!-- Connection rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="blockchain-info">
+        <h3>Blockchain Network Status</h3>
+        <div class="blockchain-stats">
+          <div class="blockchain-stat">
+            <p>Network Hash Rate</p>
+            <span id="networkHashRate">123.45 TH/s</span>
+          </div>
+          <div class="blockchain-stat">
+            <p>Latest Block</p>
+            <span id="latestBlock">#789,012</span>
+          </div>
+          <div class="blockchain-stat">
+            <p>Pending Transactions</p>
+            <span id="pendingTransactions">23</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data for transactions
+    const transactions = [
+      { id: "TRX001", from: "Alice", to: "Bob", amount: 500, status: "Completed" },
+      { id: "TRX002", from: "Carol", to: "David", amount: 750, status: "Pending" },
+      { id: "TRX003", from: "Eve", to: "Frank", amount: 1000, status: "Completed" },
+    ];
+
+    // Sample data for tutor-student connections
+    const connections = [
+      { tutor: "John Doe", student: "Jane Smith", subject: "Mathematics", date: "2023-06-15", status: "Scheduled" },
+      { tutor: "Alice Johnson", student: "Bob Williams", subject: "Physics", date: "2023-06-14", status: "Completed" },
+      { tutor: "Carol Brown", student: "David Lee", subject: "Chemistry", date: "2023-06-16", status: "Pending" },
+    ];
+
+    function populateTable(tableId, data) {
+      const tableBody = document.getElementById(tableId);
+      tableBody.innerHTML = '';
+      data.forEach(item => {
+        const row = tableBody.insertRow();
+        Object.values(item).forEach(value => {
+          const cell = row.insertCell();
+          cell.textContent = value;
+        });
+        const actionCell = row.insertCell();
+        const viewButton = document.createElement('button');
+        viewButton.textContent = 'View';
+        viewButton.className = 'action-btn view-btn';
+        viewButton.onclick = () => viewDetails(item);
+        actionCell.appendChild(viewButton);
+      });
+    }
+
+    function viewDetails(item) {
+      // Placeholder for viewing details
+      console.log("Viewing details for:", item);
+      alert(`Viewing details for ${item.id || item.tutor}`);
+    }
+
+    function signOut() {
+      if (confirm("Are you sure you want to sign out?")) {
+        alert("You have been signed out.");
+        // Redirect to login page or perform other necessary actions
+      }
+    }
+
+    // Populate tables on load
+    window.onload = function() {
+      populateTable('transactionsTableBody', transactions);
+      populateTable('connectionsTableBody', connections);
+    }
+
+    // Simulating real-time updates
+    setInterval(() => {
+      document.getElementById('totalUsers').textContent = Math.floor(Math.random() * 1000) + 1000;
+      document.getElementById('activeTutors').textContent = Math.floor(Math.random() * 50) + 50;
+      document.getElementById('activeStudents').textContent = Math.floor(Math.random() * 500) + 500;
+      document.getElementById('sessionsToday').textContent = Math.floor(Math.random() * 30) + 30;
+      document.getElementById('networkHashRate').textContent = (Math.random() * 100 + 100).toFixed(2) + " TH/s";
+      document.getElementById('latestBlock').textContent = "#" + (Math.floor(Math.random() * 1000) + 789000);
+      document.getElementById('pendingTransactions').textContent = Math.floor(Math.random() * 20) + 10;
+    }, 5000);
+  </script>
+</body></html>

@@ -1,26 +1,22 @@
 package main
 
 import (
+	"log"
 	"net/http"
-	"time"
 
 	"mwalimu/functions"
 )
 
 func main() {
+	// Serve static files from the "templates" folder
+	http.Handle("/", http.FileServer(http.Dir("./templates")))
+
+	// Register handler functions
+	http.HandleFunc("/signup", functions.SignupHandler)
 	http.HandleFunc("/login", functions.LoginHandler)
 	http.HandleFunc("/logout", functions.LogoutHandler)
-	http.HandleFunc("/protected", functions.AuthMiddleware(functions.ProtectedHandler))
+	http.Handle("/protected", functions.AuthMiddleware(http.HandlerFunc(functions.ProtectedHandler)))
 
-	blockchain := functions.Blockchain{}
-	genesisBlock := functions.Block{
-		Timestamp:    time.Now().Unix(),
-		Data:         []byte("Genesis Block"),
-		PreviousHash: []byte{},
-	}
-	genesisBlock.Hash = functions.CalculateHash(genesisBlock)
-	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
-
-	block1Data := []byte("")
-	http.ListenAndServe(":8080", nil)
+	log.Println("Server started on :8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

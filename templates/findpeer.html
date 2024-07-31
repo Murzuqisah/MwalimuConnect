@@ -1,0 +1,312 @@
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MwalimuConnect: Find a Study Partner</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --accent-color: #f39c12;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+      
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            list-style-type: none;
+        }
+
+        nav ul li {
+            margin-left: 1rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .search-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-form input,
+        .search-form select {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .search-form button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            background-color: #219653;
+        }
+
+        .partner-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .partner-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .partner-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .partner-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .partner-card p {
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #219653;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+   
+          
+    
+  
+
+    <main class="container">
+        <h1>Find a Study Partner</h1>
+        <p>Connect with fellow learners who share your academic interests and goals.</p>
+
+        <div class="search-container">
+            <form class="search-form">
+                <input type="text" placeholder="Subject or topic">
+                <select>
+                    <option value="">Education Level</option>
+                    <option value="primary">Primary</option>
+                    <option value="secondary">Secondary</option>
+                    <option value="university">University</option>
+                </select>
+                <select>
+                    <option value="">Availability</option>
+                    <option value="weekdays">Weekdays</option>
+                    <option value="weekends">Weekends</option>
+                    <option value="evenings">Evenings</option>
+                </select>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="partner-list">
+            <div class="partner-card">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="Profile picture of a smiling person">
+                <h2>John Doe</h2>
+                <p>Subject: Mathematics</p>
+                <p>Education: Secondary</p>
+                <p>Availability: Weekdays</p>
+                <button class="btn connect-btn" data-partner="John Doe">Connect</button>
+            </div>
+            <div class="partner-card">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="Profile picture of a smiling person">
+                <h2>Jane Smith</h2>
+                <p>Subject: Biology</p>
+                <p>Education: University</p>
+                <p>Availability: Evenings</p>
+                <button class="btn connect-btn" data-partner="Jane Smith">Connect</button>
+            </div>
+            <div class="partner-card">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="Profile picture of a smiling person">
+                <h2>David Ngugi</h2>
+                <p>Subject: History</p>
+                <p>Education: Secondary</p>
+                <p>Availability: Weekends</p>
+                <button class="btn connect-btn" data-partner="David Ngugi">Connect</button>
+            </div>
+            <div class="partner-card">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="Profile picture of a smiling person">
+                <h2>Mary Ochieng</h2>
+                <p>Subject: Chemistry</p>
+                <p>Education: University</p>
+                <p>Availability: Weekdays</p>
+                <button class="btn connect-btn" data-partner="Mary Ochieng">Connect</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="connectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Connect with <span id="partnerName"></span></h2>
+            <p>Send a message to introduce yourself:</p>
+            <textarea id="connectMessage" rows="4" style="width: 100%; margin-bottom: 10px;"></textarea>
+            <button id="sendConnectRequest" class="btn">Send Connect Request</button>
+        </div>
+    </div>
+
+    <script>
+        // Connect button functionality
+        const connectButtons = document.querySelectorAll('.connect-btn');
+        const modal = document.getElementById('connectModal');
+        const closeBtn = document.querySelector('.close');
+        const partnerNameSpan = document.getElementById('partnerName');
+        const connectMessage = document.getElementById('connectMessage');
+        const sendConnectRequest = document.getElementById('sendConnectRequest');
+
+        connectButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const partnerName = this.getAttribute('data-partner');
+                partnerNameSpan.textContent = partnerName;
+                modal.style.display = 'block';
+            });
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        sendConnectRequest.onclick = function() {
+            const partnerName = partnerNameSpan.textContent;
+            const message = connectMessage.value;
+            
+            // Here you would typically send this data to your server
+            // For demonstration, we'll just log it to the console
+            console.log(`Connecting with ${partnerName}. Message: ${message}`);
+
+            // Simulate a successful connection request
+            alert(`Connection request sent to ${partnerName}!`);
+            modal.style.display = 'none';
+            connectMessage.value = '';
+        }
+
+        // Search functionality (simplified for demonstration)
+        document.querySelector('.search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Search functionality will filter the results based on your criteria.');
+        });
+    </script>
+</body></html>

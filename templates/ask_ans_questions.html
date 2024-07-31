@@ -1,0 +1,351 @@
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MwalimuConnect: Ask & Answer Questions</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --accent-color: #f39c12;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+        }
+    
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+    
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+    
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+        }
+    
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        nav ul {
+            display: flex;
+            list-style-type: none;
+        }
+    
+        nav ul li {
+            margin-left: 1rem;
+        }
+    
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+    
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+    
+        h1, h2 {
+            color: var(--primary-color);
+        }
+    
+        .question-form, .answer-form {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+    
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+    
+        textarea {
+            height: 150px;
+        }
+    
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+    
+        .btn:hover {
+            background-color: #219653;
+        }
+    
+        .question-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+    
+        .question-meta {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 1rem;
+        }
+    
+        .tag {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+    
+        .answer-button {
+            background-color: var(--accent-color);
+            margin-top: 1rem;
+        }
+    
+        .contact-button {
+            background-color: var(--primary-color);
+            margin-top: 1rem;
+            margin-left: 1rem;
+        }
+    
+        .answers {
+            margin-top: 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--secondary-color);
+        }
+    
+        .answer {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+    </head>
+    <body>
+     
+    
+        <main class="container">
+            <h1>Ask & Answer Questions</h1>
+            <p>Need help or want to share your knowledge? Ask or answer questions in our community!</p>
+    
+            <form class="question-form" id="askQuestionForm">
+                <h2>Ask a Question</h2>
+                <div class="form-group">
+                    <label for="questionTitle">Question Title</label>
+                    <input type="text" id="questionTitle" name="questionTitle" required placeholder="Enter a clear, concise title for your question">
+                </div>
+                <div class="form-group">
+                    <label for="questionBody">Question Details</label>
+                    <textarea id="questionBody" name="questionBody" required placeholder="Provide more context and details about your question"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="questionSubject">Subject</label>
+                    <select id="questionSubject" name="questionSubject" required>
+                        <option value="">Select a subject</option>
+                        <option value="math">Mathematics</option>
+                        <option value="science">Science</option>
+                        <option value="english">English</option>
+                        <option value="history">History</option>
+                        <option value="geography">Geography</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="questionTags">Tags (comma-separated)</label>
+                    <input type="text" id="questionTags" name="questionTags" placeholder="E.g., algebra, equations, polynomials">
+                </div>
+                <button type="submit" class="btn">Submit Question</button>
+            </form>
+    
+            <section class="recent-questions">
+                <h2>Recent Questions</h2>
+                <div id="recentQuestionsList">
+                    <!-- Recent questions will be dynamically added here -->
+                </div>
+            </section>
+        </main>
+    
+        <script>
+            // Sample data for recent questions
+            const recentQuestions = [
+                {
+                    id: 1,
+                    title: "How do I solve quadratic equations?",
+                    body: "I'm having trouble understanding the steps to solve quadratic equations. Can someone explain the process?",
+                    author: "John Doe",
+                    date: "2023-06-15",
+                    subject: "Mathematics",
+                    tags: ["algebra", "equations"],
+                    answers: []
+                },
+                {
+                    id: 2,
+                    title: "What's the difference between photosynthesis and cellular respiration?",
+                    body: "I often confuse these two processes. Can someone clarify the main differences between photosynthesis and cellular respiration?",
+                    author: "Jane Smith",
+                    date: "2023-06-14",
+                    subject: "Science",
+                    tags: ["biology", "plants"],
+                    answers: []
+                },
+                {
+                    id: 3,
+                    title: "Tips for writing a persuasive essay?",
+                    body: "I have an assignment to write a persuasive essay. Does anyone have tips on how to structure it effectively?",
+                    author: "Mike Johnson",
+                    date: "2023-06-13",
+                    subject: "English",
+                    tags: ["writing", "essays"],
+                    answers: []
+                }
+            ];
+    
+            // Function to display recent questions
+            function displayRecentQuestions() {
+                const recentQuestionsList = document.getElementById('recentQuestionsList');
+                recentQuestionsList.innerHTML = '';
+    
+                recentQuestions.forEach(question => {
+                    const questionCard = document.createElement('div');
+                    questionCard.className = 'question-card';
+                    questionCard.innerHTML = `
+                        <h3>${question.title}</h3>
+                        <div class="question-meta">
+                            Asked by ${question.author} on ${question.date} | Subject: ${question.subject}
+                        </div>
+                        <p>${question.body.substring(0, 150)}${question.body.length > 150 ? '...' : ''}</p>
+                        <div>
+                            ${question.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <button class="btn answer-button" onclick="showAnswerForm(${question.id})">Answer</button>
+                        <button class="btn contact-button" onclick="contactUser('${question.author}')">Contact ${question.author}</button>
+                        <div class="answers" id="answers-${question.id}">
+                            ${question.answers.map(answer => `
+                                <div class="answer">
+                                    <p>${answer.body}</p>
+                                    <div class="question-meta">Answered by ${answer.author} on ${answer.date}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div id="answer-form-${question.id}" style="display: none;">
+                            <form class="answer-form" onsubmit="submitAnswer(event, ${question.id})">
+                                <textarea required placeholder="Type your answer here"></textarea>
+                                <button type="submit" class="btn">Submit Answer</button>
+                            </form>
+                        </div>
+                    `;
+                    recentQuestionsList.appendChild(questionCard);
+                });
+            }
+    
+            // Display recent questions on page load
+            displayRecentQuestions();
+    
+            // Handle form submission
+            document.getElementById('askQuestionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const title = document.getElementById('questionTitle').value;
+                const body = document.getElementById('questionBody').value;
+                const subject = document.getElementById('questionSubject').value;
+                const tags = document.getElementById('questionTags').value.split(',').map(tag => tag.trim());
+    
+                // Create new question object
+                const newQuestion = {
+                    id: recentQuestions.length + 1,
+                    title: title,
+                    body: body,
+                    author: "Current User", // Replace with actual user name
+                    date: new Date().toISOString().split('T')[0],
+                    subject: subject,
+                    tags: tags,
+                    answers: []
+                };
+    
+                // Add new question to the list (in a real app, this would be sent to a server)
+                recentQuestions.unshift(newQuestion);
+    
+                // Update the display
+                displayRecentQuestions();
+    
+                // Clear the form
+                this.reset();
+    
+                // Show success message (you can replace this with a more sophisticated notification)
+                alert('Your question has been submitted successfully!');
+            });
+    
+            function showAnswerForm(questionId) {
+                const answerForm = document.getElementById(`answer-form-${questionId}`);
+                answerForm.style.display = answerForm.style.display === 'none' ? 'block' : 'none';
+            }
+    
+            function submitAnswer(event, questionId) {
+                event.preventDefault();
+                const form = event.target;
+                const answerBody = form.querySelector('textarea').value;
+                
+                // Find the question and add the answer
+                const question = recentQuestions.find(q => q.id === questionId);
+                if (question) {
+                    question.answers.push({
+                        body: answerBody,
+                        author: "Current User", // Replace with actual user name
+                        date: new Date().toISOString().split('T')[0]
+                    });
+                    
+                    // Update the display
+                    displayRecentQuestions();
+                    
+                    // Clear the form and hide it
+                    form.reset();
+                    showAnswerForm(questionId);
+                    
+                    alert('Your answer has been submitted successfully!');
+                }
+            }
+    
+            function contactUser(username) {
+                // In a real application, this would open a messaging interface or provide contact information
+                alert(`Contacting ${username}. In a full implementation, this would open a messaging interface.`);
+            }
+        </script>
+    </body></html>

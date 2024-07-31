@@ -4,7 +4,7 @@
     <title>MwalimuConnect: Sign Up</title>
     <style>
       :root {
-        --primary-color: #2c3e50;
+        --primary-color: #15324e;
         --secondary-color: #27ae60;
         --accent-color: #f39c12;
         --background-color: #ecf0f1;
@@ -17,6 +17,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        /* background-image: var(--primary-color); */
       }
     
       body {
@@ -113,7 +114,7 @@
       <div class="signup-container">
         <h1>Join MwalimuConnect</h1>
         
-        <form action="/signup" method="post" id="signup" novalidate>
+        <form action="/signup" method="POST" id="signup" novalidate>
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
@@ -143,7 +144,7 @@
             </select>
           </div>
     
-          <button type="submit">Sign Up</button>
+          <button type="submit" onclick="window.location.href='/peertopeer.html'">Sign Up</button>
           <p>Already have an account? <a href="/login.html">Log in</a>.</p>
         </form>
       </div>

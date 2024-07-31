@@ -1,349 +1,228 @@
 <html><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KenyaLearn: Community Q&A</title>
-<style>
-  :root {
-    --primary-color: #163d57;
-    --secondary-color: #2b7449;
-    --accent-color: #e74c3c;
-    --background-color: #ecf0f1;
-    --text-color: #34495e;
-  }
-  
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-  }
-  
-  h1, h2, h3 {
-    margin: 0;
-  }
-  
-  .search-bar {
-    margin: 20px 0;
-  }
-  
-  .search-bar input {
-    width: 70%;
-    padding: 10px;
-    font-size: 16px;
-  }
-  
-  .search-bar button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .ask-question {
-    margin-bottom: 20px;
-  }
-  
-  .ask-question button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .question-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .question-item {
-    background-color: white;
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .question-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .question-title {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .question-meta {
-    font-size: 14px;
-    color: #777;
-  }
-  
-  .question-body {
-    margin-bottom: 15px;
-  }
-  
-  .question-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .question-tags {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .tag {
-    background-color: #e0e0e0;
-    padding: 5px 10px;
-    border-radius: 3px;
-    font-size: 12px;
-  }
-  
-  .question-actions button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-  
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  #questionForm textarea,
-  #questionForm input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-  
-  #questionForm button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MwalimuConnect: Peer-to-Peer Learning</title>
+  <style>
+      :root {
+          --primary-color: #2c3e50;
+          --secondary-color: #27ae60;
+          --accent-color: #f39c12;
+          --background-color: #ecf0f1;
+          --text-color: #34495e;
+      }
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          font-family: 'Lato', sans-serif;
+          background-color: var(--background-color);
+          color: var(--text-color);
+          line-height: 1.6;
+      }
+
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 2rem;
+      }
+
+      header {
+          background-color: var(--primary-color);
+          color: white;
+          padding: 1rem 0;
+      }
+
+      nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      nav ul {
+          display: flex;
+          list-style-type: none;
+      }
+
+      nav ul li {
+          margin-left: 1rem;
+      }
+
+      nav ul li a {
+          color: white;
+          text-decoration: none;
+          transition: color 0.3s ease;
+      }
+
+      nav ul li a:hover {
+          color: var(--accent-color);
+      }
+
+      h1 {
+          font-size: 2.5rem;
+          margin-bottom: 1rem;
+          color: var(--primary-color);
+      }
+
+      .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-top: 2rem;
+      }
+
+      .card {
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          padding: 1.5rem;
+          transition: transform 0.3s ease;
+      }
+
+      .card:hover {
+          transform: translateY(-5px);
+      }
+
+      .card h2 {
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+          color: var(--primary-color);
+      }
+
+      .card p {
+          margin-bottom: 1rem;
+      }
+
+      .btn {
+          display: inline-block;
+          background-color: var(--secondary-color);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          text-decoration: none;
+          transition: background-color 0.3s ease;
+      }
+
+      .btn:hover {
+          background-color: #219653;
+      }
+
+      #chat-container {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 300px;
+          height: 400px;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+      }
+
+      #chat-messages {
+          flex-grow: 1;
+          overflow-y: auto;
+          padding: 1rem;
+      }
+
+      #chat-input {
+          display: flex;
+          padding: 1rem;
+          border-top: 1px solid #e0e0e0;
+      }
+
+      #chat-input input {
+          flex-grow: 1;
+          padding: 0.5rem;
+          border: 1px solid #e0e0e0;
+          border-radius: 5px;
+      }
+
+      #chat-input button {
+          background-color: var(--secondary-color);
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          margin-left: 0.5rem;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>KenyaLearn Community Q&A</h1>
-    <p>Ask, Answer, and Learn Together</p>
-  </header>
 
-  <div class="container">
-    <div class="search-bar">
-      <input type="text" placeholder="Search for questions...">
-      <button onclick="searchQuestions()">Search</button>
-    </div>
 
-    <div class="ask-question">
-      <button onclick="openQuestionModal()">Ask a Question</button>
-    </div>
+  <main class="container">
+      <h1>Peer-to-Peer Learning</h1>
+      <p>Connect with fellow learners and tutors to enhance your educational journey.</p>
 
-    <ul class="question-list" id="questionList">
-      <!-- Questions will be dynamically added here -->
-    </ul>
-  </div>
+      <div class="grid">
+          <div class="card">
+              <h2>Find a Study Partner</h2>
+              <p>Connect with peers who are studying similar subjects to form study groups or engage in collaborative learning.</p>
+              <a href="findpeer.html" class="btn">Find Peers</a>
+          </div>
+          <div class="card">
+              <h2>Become a Tutor</h2>
+              <p>Share your knowledge and skills with others by becoming a peer tutor. Help fellow students while reinforcing your own understanding.</p>
+              <a href="https://mwalimuconnect.com/become-tutor" class="btn">Start Tutoring</a>
+          </div>
+          <div class="card">
+              <h2>Join a Study Group</h2>
+              <p>Participate in existing study groups focused on specific subjects or topics. Learn together and share insights with your peers.</p>
+              <a href="https://mwalimuconnect.com/study-groups" class="btn">Browse Groups</a>
+          </div>
+          <div class="card">
+              <h2>Ask Questions</h2>
+              <p>Post your questions and get help from the MwalimuConnect community. Engage in discussions and expand your knowledge.</p>
+              <a href="ask_ans_questions.html" class="btn">Ask Now</a>
+          </div>
+      </div>
+  </main>
 
-  <div id="questionModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeQuestionModal()">&times;</span>
-      <h2>Ask a Question</h2>
-      <form id="questionForm">
-        <input type="text" id="questionTitle" placeholder="Enter your question title" required>
-        <textarea id="questionBody" rows="5" placeholder="Describe your question in detail" required></textarea>
-        <input type="text" id="questionTags" placeholder="Enter tags (comma-separated)">
-        <button type="submit">Post Question</button>
-      </form>
-    </div>
+  <div id="chat-container">
+      <div id="chat-messages"></div>
+      <div id="chat-input">
+          <input type="text" placeholder="Type your message...">
+          <button>Send</button>
+      </div>
   </div>
 
   <script>
-    // Sample questions data
-    let questions = [
-      {
-        id: 1,
-        title: "How do I solve quadratic equations?",
-        body: "I'm struggling with quadratic equations in my algebra class. Can someone explain the steps to solve them?",
-        author: "Alice Student",
-        date: "2023-06-15",
-        tags: ["mathematics", "algebra"],
-        answers: 3,
-        views: 25
-      },
-      {
-        id: 2,
-        title: "What's the difference between mitosis and meiosis?",
-        body: "I keep mixing up mitosis and meiosis in my biology class. Can someone explain the key differences?",
-        author: "Bob Learner",
-        date: "2023-06-14",
-        tags: ["biology", "cell-division"],
-        answers: 2,
-        views: 18
-      },
-      {
-        id: 3,
-        title: "How to write a compelling essay introduction?",
-        body: "I'm working on an essay for my English class and I'm struggling with the introduction. Any tips?",
-        author: "Carol Writer",
-        date: "2023-06-13",
-        tags: ["english", "writing"],
-        answers: 4,
-        views: 32
-      }
-    ];
+      const chatMessages = document.getElementById('chat-messages');
+      const chatInput = document.querySelector('#chat-input input');
+      const chatButton = document.querySelector('#chat-input button');
 
-    function displayQuestions() {
-      const questionList = document.getElementById('questionList');
-      questionList.innerHTML = '';
-
-      questions.forEach(question => {
-        const li = document.createElement('li');
-        li.className = 'question-item';
-        li.innerHTML = `
-          <div class="question-header">
-            <span class="question-title">${question.title}</span>
-            <span class="question-meta">Asked by ${question.author} on ${question.date}</span>
-          </div>
-          <div class="question-body">${question.body}</div>
-          <div class="question-footer">
-            <div class="question-tags">
-              ${question.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <div class="question-actions">
-              <span>${question.answers} answers</span>
-              <span>${question.views} views</span>
-              <button onclick="viewQuestion(${question.id})">View</button>
-              <button onclick="answerQuestion(${question.id})">Answer</button>
-            </div>
-          </div>
-        `;
-        questionList.appendChild(li);
+      chatButton.addEventListener('click', sendMessage);
+      chatInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+              sendMessage();
+          }
       });
-    }
 
-    function searchQuestions() {
-      const searchTerm = document.querySelector('.search-bar input').value.toLowerCase();
-      const filteredQuestions = questions.filter(question => 
-        question.title.toLowerCase().includes(searchTerm) || 
-        question.body.toLowerCase().includes(searchTerm) ||
-        question.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-      );
-      questions = filteredQuestions;
-      displayQuestions();
-    }
+      function sendMessage() {
+          const message = chatInput.value.trim();
+          if (message) {
+              appendMessage('You', message);
+              chatInput.value = '';
+              // Simulated response (replace with actual backend integration)
+              setTimeout(() => {
+                  appendMessage('MwalimuBot', 'Thank you for your message. How can I assist you today?');
+              }, 1000);
+          }
+      }
 
-    function openQuestionModal() {
-      document.getElementById('questionModal').style.display = 'block';
-    }
-
-    function closeQuestionModal() {
-      document.getElementById('questionModal').style.display = 'none';
-    }
-
-    document.getElementById('questionForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const title = document.getElementById('questionTitle').value;
-      const body = document.getElementById('questionBody').value;
-      const tags = document.getElementById('questionTags').value.split(',').map(tag => tag.trim());
-
-      const newQuestion = {
-        id: questions.length + 1,
-        title: title,
-        body: body,
-        author: "Current User", // Replace with actual user name
-        date: new Date().toISOString().split('T')[0],
-        tags: tags,
-        answers: 0,
-        views: 0
-      };
-
-      questions.unshift(newQuestion);
-      displayQuestions();
-      closeQuestionModal();
-    });
-
-    function viewQuestion(id) {
-      // Implement view question functionality
-      alert(`Viewing question ${id}`);
-      // This could open a new page or modal with the full question and its answers
-    }
-
-    function answerQuestion(id) {
-      // Implement answer question functionality
-      alert(`Answering question ${id}`);
-      // This could open a modal or form for submitting an answer
-    }
-
-    // Initial display of questions
-    displayQuestions();
-
-    // Simulating real-time updates
-    setInterval(() => {
-      // Randomly update view count for a question
-      const randomIndex = Math.floor(Math.random() * questions.length);
-      questions[randomIndex].views += 1;
-      displayQuestions();
-    }, 5000);
+      function appendMessage(sender, text) {
+          const messageElement = document.createElement('div');
+          messageElement.innerHTML = `<strong>${sender}:</strong> ${text}`;
+          chatMessages.appendChild(messageElement);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
   </script>
-</body></html>
+</body>
+</html>

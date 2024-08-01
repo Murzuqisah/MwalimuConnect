@@ -1,9 +1,6 @@
 # MwalimuConnect
 
-
-
-# Mwalimu Connect 
-Mwalimu Connect is a peer-to-peer tutoring platform designed to facilitate real-time communication between tutors and students in Kenya. The platform leverages Go APIs for seamless interaction and blockchain technology for secure payment transactions. This README provides an overview of the project's scope, technologies used, and instructions for setup and usage.
+MwalimuConnect is a peer-to-peer tutoring platform designed to facilitate real-time communication between tutors and students in Kenya. The platform leverages Go APIs for seamless interaction and blockchain technology for secure payment transactions. This README provides an overview of the project's scope, technologies used, and instructions for setup and usage.
 
 ## Table of Contents
 
@@ -20,7 +17,7 @@ Mwalimu Connect is a peer-to-peer tutoring platform designed to facilitate real-
 
 ## Project Overview
 
-Mwalimu Connect aims to bridge the gap between students and tutors by providing a platform where they can connect, communicate, and transact securely. The platform supports real-time communication via video and chat, allows for scheduling and managing tutoring sessions, and ensures that payments are processed securely through blockchain technology.
+MwalimuConnect aims to bridge the gap between students and tutors by providing a platform where they can connect, communicate, and transact securely. The platform supports real-time communication via video and chat, allows for scheduling and managing tutoring sessions, and ensures that payments are processed securely through blockchain technology.
 
 ## Technology Stack
 

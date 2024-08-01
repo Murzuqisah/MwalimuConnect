@@ -3,6 +3,7 @@ package functions
 import (
 	"context"
 	"net/http"
+	"github.com/google/uuid"
 )
 
 func SessionMiddleware(next http.Handler) http.Handler {
@@ -41,9 +42,8 @@ func InitSession(w http.ResponseWriter, r *http.Request) *Session {
 }
 
 func GenerateSessionID() string {
-	// TO DO: implement session ID generation logic here
-	// For example, you can use a UUID library
-	return "session-id-123"
+	id := uuid.New()
+	return id.String()
 }
 
 func RetrieveSession(sessionID string) (*Session, error) {

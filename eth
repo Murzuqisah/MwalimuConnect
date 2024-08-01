@@ -1,0 +1,199 @@
+const (
+	ethLink       = "https://mainnet.infura.io/v3/436051433bd54480aca5957b7d0c77bb"
+	ethPrivateKey = "436051433bd54480aca5957b7d0c77bb"
+)
+
+// package main
+
+// import (
+// 	"html/template"
+// 	"log"
+// 	"net/http"
+// 	"time"
+
+// 	"mwalimu/blockchain"
+// 	"mwalimu/functions"
+
+// 	"github.com/ethereum/go-ethereum/common"
+// 	"github.com/ethereum/go-ethereum/crypto"
+// 	"github.com/ethereum/go-ethereum/ethclient"
+// )
+
+// // Config stores application configuration
+// type Config struct {
+// 	EthLink       string
+// 	EthPrivateKey string
+// 	ContractAddr  string
+// }
+
+// // NewConfig returns a new Config instance
+// func NewConfig() *Config {
+// 	return &Config{
+// 		EthLink:       "https://mainnet.infura.io/v3/436051433bd54480aca5957b7d0c77bb",
+// 		EthPrivateKey: "436051433bd54480aca5957b7d0c77bb",
+// 		ContractAddr:  "0x...", // deployed contract address
+// 	}
+// }
+
+// func main() {
+// 	// Initialize configuration
+// 	cfg := NewConfig()
+
+// 	// Initialize blockchain
+// 	blockchain, err := initBlockchain()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Connect to Ethereum client
+// 	client, err := connectToEthereumClient(cfg.EthLink)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer client.Close()
+
+// 	// Load contract
+// 	contract, err := loadContract(client, cfg.ContractAddr, cfg.EthPrivateKey)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Initialize HTTP handlers
+// 	http.HandleFunc("/scripts/", fileServer)
+// 	http.HandleFunc("/static/", fileServer)
+// 	http.HandleFunc("/", servePage)
+// 	http.HandleFunc("/forgot-password", functions.ServeForgotPasswordForm)
+// 	http.HandleFunc("/handle-forgot-password", functions.HandleForgotPassword)
+// 	http.HandleFunc("/reset-password", functions.ServeResetPasswordForm)
+// 	http.HandleFunc("/handle-reset-password", functions.HandleResetPassword)
+// 	http.HandleFunc("/signup", signupHandler)
+
+// 	// Start the server
+// 	log.Println("Server started at http://localhost:8080")
+// 	if err := http.ListenAndServe(":8080", nil); err != nil {
+// 		log.Fatal(err)
+// 	}
+// }
+
+// func initBlockchain() (*functions.Blockchain, error) {
+// 	// Initialize blockchain with genesis block
+// 	blockchain := functions.Blockchain{}
+// 	genesisBlock := functions.Block{
+// 		Timestamp:    time.Now().Unix(),
+// 		Data:         []byte("Genesis Block"),
+// 		PreviousHash: []byte{},
+// 	}
+// 	genesisBlock.Hash = functions.CalculateHash(genesisBlock)
+// 	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
+// 	return &blockchain, nil
+// }
+
+// func connectToEthereumClient(link string) (*ethclient.Client, error) {
+// 	// Connect to the Ethereum client
+// 	client, err := ethclient.Dial(link)
+// 	return client, err
+// }
+
+// func loadContract(client *ethclient.Client, contractAddr string, privateKey string) (*blockchain.Contract, error) {
+// 	// Load the contract's address and private key
+// 	contractAddress := common.HexToAddress(contractAddr)
+// 	privateKeyECDSA, err := crypto.HexToECDSA(privateKey)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	contract, err := blockchain.NewContract(contractAddress, privateKeyECDSA)
+// 	return contract, err
+// }
+
+// // Serve static files (CSS, JS)
+// func fileServer(w http.ResponseWriter, r *http.Request) {
+// 	http.ServeFile(w, r, "./static/"+r.URL.Path[len("/scripts/"):])
+// }
+
+// // Serve HTML pages based on referral
+// func servePage(w http.ResponseWriter, r *http.Request) {
+// 	page := r.URL.Path[1:]
+// 	if page == "" || page == "/" {
+// 		page = "index.html"
+// 	}
+
+// 	// Define template path
+// 	tmplPath := "./templates/" + page
+
+// 	// Parse and execute the template
+// 	tmpl, err := template.ParseFiles(tmplPath)
+// 	if err != nil {
+// 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+// 		log.Printf("Template parsing error: %v", err)
+// 		return
+// 	}
+// 	err = tmpl.Execute(w, nil)
+// 	if err != nil {
+// 		http.Error(w, "Internal server error", http.StatusInternalServerError)
+// 		log.Printf("Template execution error: %v", err)
+// 		return
+// 	}
+// }
+
+// // Handle signup requests
+// func signupHandler(w http.ResponseWriter, r *http.Request) {
+// 	if r.Method != http.MethodPost {
+// 		http.ServeFile(w, r, "templates/signup.html")
+// 		return
+// 	}
+
+// 	// Create a new Ethereum account for the user
+// 	account, err := createEthereumAccount()
+// 	if err != nil {
+// 		http.Error(w, "Failed to create Ethereum account", http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	// Store user credentials
+// 	err = storeUserCredentials(r, account)
+// 	if err != nil {
+// 		http.Error(w, "Failed to store user credentials", http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	// Set session cookie
+// 	session, err := createSession(account)
+// 	if err != nil {
+// 		http.Error(w, "Failed to create session", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	http.SetCookie(w, &http.Cookie{
+// 		Name:  "session",
+// 		Value: session,
+// 	})
+
+// 	// Redirect to dashboard
+// 	http.Redirect(w, r, "/dashboard", http.StatusFound)
+// }
+
+// func createEthereumAccount() (string, error) {
+// 	// Implement Ethereum account creation logic here
+// 	// For example, using the go-ethereum library:
+// 	// account, err := ethaccounts.NewAccount(rand.Reader)
+// 	// return account.Address.Hex(), err
+// }
+
+// func storeUserCredentials(r *http.Request, account string) error {
+// 	// Implement user credential storage logic here
+// 	// For example, using a database:
+// 	// db, err := sql.Open("sqlite3", "./users.db")
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
+// 	// defer db.Close()
+// 	// _, err = db.Exec("INSERT INTO users (address, password) VALUES (?, ?)", account, r.FormValue("password"))
+// 	// return err
+// }
+
+// func createSession(account string) (string, error) {
+// 	// Implement session creation logic here
+// 	// For example, using a random session ID:
+// 	// session := make([]byte, 32)
+// 	// _, err := rand.Read(session)
+// 	// return base64.StdEncoding.EncodeToString(session), err
+// }

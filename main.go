@@ -1,6 +1,9 @@
 package main
 
 import (
+	"crypto/rand"
+	"database/sql"
+	"encoding/base64"
 	"fmt"
 	"html/template"
 	"log"
@@ -10,89 +13,47 @@ import (
 	"time"
 
 	"mwalimu/blockchain"
+	"mwalimu/ethaccounts"
 	"mwalimu/functions"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-const (
-	ethLink       = "https://mainnet.infura.io/v3/436051433bd54480aca5957b7d0c77bb"
-	ethPrivateKey = "436051433bd54480aca5957b7d0c77bb"
-)
+type Config struct {
+	EthLink         string
+	EthPrivateKey   string
+	ContractAddress string
+}
+
+func NewConfig() *Config {
+	return &Config{
+		EthLink:       "https://mainnet.infura.io/v3/436051433bd54480aca5957b7d0c77bb",
+		EthPrivateKey: "436051433bd54480aca5957b7d0c77bb",
+		ContractAddr:  "0x...",
+	}
+}
 
 func main() {
-	// Initialize blockchain with genesis block
-	blockchain := functions.Blockchain{}
-	genesisBlock := functions.Block{
-		Timestamp:    time.Now().Unix(),
-		Data:         []byte("Genesis Block"),
-		PreviousHash: []byte{},
-	}
-	genesisBlock.Hash = functions.CalculateHash(genesisBlock)
-	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
+	// Initialize configuration
+	cfg := NewConfig()
 
-	// Connect to the Ethereum client
-	client, err := ethclient.Dial(ethLink)
+	blockchain, err := initBlockchain()
 	if err != nil {
-		log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+		log.Fatal(err)
+	}
+
+	client, err := connectToEthereumClient(cfg.EthLink)
+	if err != nil {
+		log.Fatal(err)
 	}
 	defer client.Close()
 
-	// Load the contract's address and private key
-	contractAddress := common.HexToAddress("0x...")     // deployed contract address
-	privateKey, err := crypto.HexToECDSA(ethPrivateKey) // API key
-	if err != nil {
-		log.Fatalf("Failed to parse private key: %v", err)
-	}
-	userStorage, err := blockchain.NewUserStorageContract(contractAddress, client)
+	contract, err := loadContract(client, cfg.ContractAddr, cfg.EthPrivateKey)
 	if err != nil {
 		log.Fatal(err)
 	}
-	contract, err := blockchain.NewContract(contractAddress, privateKey)
-	if err != nil {
-		log.Fatalf("Failed to deploy contract: %v", err)
-	}
-	defer contract.Stop()
-	// Create a new instance of the contract
-	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, contract)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tx, err := userStorage.CreateUser(auth, "John Doe", "john@example.com", "Learner")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Create an instance of SessionChain
-	sessionChain, err := blockchain.NewSessionChain(client, contractAddress, privateKey) // <--- create function
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Retrieve session ID
-	sessionID, err := sessionChain.GetSessionID()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Session ID:", sessionID)
-
-	// Store a session ID
-	tx, err = sessionChain.StoreSessionID("my_session_id")
-	if err != nil {
-		log.Fatalf("Failed to store session ID: %v", err)
-	}
-	fmt.Printf("Transaction sent: %s\n", tx.Hash().Hex())
-
-	sessionID, err = sessionChain.GetSessionID()
-	if err != nil {
-		log.Fatalf("Failed to retrieve session ID: %v", err)
-	}
-
-	log.Printf("Retrieved session ID: %s\n", sessionID)
 
 	// Serve static files (CSS, JS)
 	http.HandleFunc("/scripts/", fileServer)
@@ -115,6 +76,35 @@ func main() {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatalf("Server failed: %v", err)
 	}
+}
+
+func initBlockchain() (*functions.Blockchain, error) {
+	// Initialize blockchain with genesis block
+	blockchain := functions.Blockchain{}
+	genesisBlock := functions.Block{
+		Timestamp:    time.Now().Unix(),
+		Data:         []byte("Genesis Block"),
+		PreviousHash: []byte{},
+	}
+	genesisBlock.Hash = functions.CalculateHash(genesisBlock)
+	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
+	return &blockchain, nil
+}
+
+func connectToEthereumClient(link string) (ethclient.Client, error) {
+	// Connect to the Ethereum client
+	client, err := ethclient.Dial(link)
+	return *client, err
+}
+
+func loadContract(client *ethclient.Client, contractAddr string, privateKey string) (*blockchain.Contract, error) {
+	contractAddress := common.HexToAddress(contractAddr)
+	privateKeyECDSA, err := crypto.HexToECDSA(privateKey)
+	if err != nil {
+		return nil, err
+	}
+	contract, err := blockchain.NewContract(contractAddress, privateKeyECDSA)
+	return contract, err
 }
 
 // Serve static files (CSS, JS)
@@ -166,10 +156,10 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	name := r.FormValue("name")
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-	role := r.FormValue("role")
+	// name := r.FormValue("name")
+	// email := r.FormValue("email")
+	// password := r.FormValue("password")
+	// role := r.FormValue("role")
 
 	// Create a new Ethereum account for the user
 	account, err := blockchain.createEthereumAccount() // <--- create this function
@@ -179,38 +169,122 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Store user credentials
-	err = functions.storeUserCredentials(email, password, account.Address.Hex()) // <--- create this function
+	err = functions.storeUserCredentials(r, account) // <--- create this function
 	if err != nil {
 		http.Error(w, "Failed to store user credentials", http.StatusInternalServerError)
 		return
 	}
 
-	// Connect to Ethereum client and get user storage contract
-	client, err := ethclient.Dial(ethLink)
+	session, err := createSession(account)
 	if err != nil {
-		http.Error(w, "Failed to connect to Ethereum client", http.StatusInternalServerError)
+		http.Error(w, "Failed to create session", http.StatusInternalServerError)
 		return
 	}
 
-	contractAddress := common.HexToAddress(ethPrivateKey)
-	userStorage, err := blockchain.NewUserStorage(contractAddress, client)
-	if err != nil {
-		http.Error(w, "Failed to initialize user storage", http.StatusInternalServerError)
-		return
-	}
-
-	// Create transaction options
-	auth, err := bind.NewKeyedTransactorWithChainID(account.PrivateKey, err)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Create user on the blockchain
-	err = userStorage.CreateUser(auth, name, email, role)
-	if err != nil {
-		http.Error(w, "Failed to create user on blockchain", http.StatusInternalServerError)
-		return
-	}
+	http.SetCookie(w, &http.Cookie{
+		Name:  "session",
+		Value: session,
+	})
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
+
+func createEthereumAccount() (string, error) {
+	// Implement Ethereum account creation logic here
+	// For example, using the go-ethereum library:
+	account, err := ethaccounts.NewAccount(rand.Reader)
+	return account.Address.Hex(), err
+}
+
+func storeUserCredentials(r *http.Request, account string) error {
+	// 	// Implement user credential storage logic here
+	// 	// For example, using a database:
+	db, err := sql.Open("sqlite3", "./users.db")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	_, err = db.Exec("INSERT INTO users (address, password) VALUES (?, ?)", account, r.FormValue("password"))
+	return err
+}
+
+func createSession(account string) (string, error) {
+	// 	// Implement session creation logic here
+	// 	// For example, using a random session ID:
+	session := make([]byte, 32)
+	_, err := rand.Read(session)
+	return base64.StdEncoding.EncodeToString(session), err
+}
+
+// func session() {
+// 	userStorage, err := blockchain.NewUserStorageContract(contractAddress, client)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Create a new instance of the contract
+// 	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, contract)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	tx, err := userStorage.CreateUser(auth, "John Doe", "john@example.com", "Learner")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Create an instance of SessionChain
+// 	sessionChain, err := blockchain.NewSessionChain(client, contractAddr, EthPrivateKey) // <--- create function
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Retrieve session ID
+// 	sessionID, err := sessionChain.GetSessionID()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println("Session ID:", sessionID)
+
+// 	// Store a session ID
+// 	tx, err = sessionChain.StoreSessionID("my_session_id")
+// 	if err != nil {
+// 		log.Fatalf("Failed to store session ID: %v", err)
+// 	}
+// 	fmt.Printf("Transaction sent: %s\n", tx.Hash().Hex())
+
+// 	sessionID, err = sessionChain.GetSessionID()
+// 	if err != nil {
+// 		log.Fatalf("Failed to retrieve session ID: %v", err)
+// 	}
+
+// 	log.Printf("Retrieved session ID: %s\n", sessionID)
+
+// Connect to Ethereum client and get user storage contract
+// client, err := ethclient.Dial(ethLink)
+// if err != nil {
+// 	http.Error(w, "Failed to connect to Ethereum client", http.StatusInternalServerError)
+// 	return
+// }
+
+// contractAddress := common.HexToAddress(ethPrivateKey)
+// userStorage, err := blockchain.NewUserStorage(contractAddress, client)
+// if err != nil {
+// 	http.Error(w, "Failed to initialize user storage", http.StatusInternalServerError)
+// 	return
+// }
+
+// // Create transaction options
+// auth, err := bind.NewKeyedTransactorWithChainID(account.PrivateKey, err)
+// if err != nil {
+// 	log.Fatal(err)
+// }
+
+// // Create user on the blockchain
+// err = userStorage.CreateUser(auth, name, email, role)
+// if err != nil {
+// 	http.Error(w, "Failed to create user on blockchain", http.StatusInternalServerError)
+// 	return
+// }
+
+// }
